@@ -296,7 +296,7 @@ data.worker = currentUser.login;
 
     try{
 
-        const response = await fetch("http://localhost:3000/api/workers", {
+        const response = await fetch("https://muhriddin-group.onrender.com", {
 
     method: "POST",
 
