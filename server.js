@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
@@ -9,12 +8,6 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// MySQL ulanish
-
-
-
-
-// Test endpoint
 
 
 app.listen(port, () => {
@@ -402,8 +395,8 @@ app.post("/api/login", (req, res) => {
         }
 
     );
-
-=======
+    
+});
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
@@ -809,5 +802,4 @@ app.post("/api/login", (req, res) => {
 
     );
 
->>>>>>> c1da502bb739da9b2660074e32494dbf31e0638a
 });
