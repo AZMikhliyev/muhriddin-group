@@ -30,14 +30,6 @@ const connection = mysql.createConnection({
   }
 });
 
-db.connect((err) => {
-    if (err) {
-        console.error('❌ MySQL ulanish xatosi:', err);
-        return;
-    }
-    console.log('✅ MySQL ga ulandi!');
-});
-
 // =====================
 // TEST
 // =====================
