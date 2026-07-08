@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muhriddin Group</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- LOGIN -->
+
+        <div class="login-container">
+
+            <div class="logo">
+                <img src="./src/assets/img/logo.png" width="200">
+            </div>
+
+            <form id="login-form">
+
+                <label>Login</label>
+                <input
+                    type="text"
+                    id="login"
+                    placeholder="Login">
+
+                <label>Parol</label>
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Parol">
+
+                <button type="submit">
+                    Kirish
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- ADMIN -->
+
+        <div class="admin">
+
+            <h1>Admin Panel</h1>
+            <div class="dashboard">
+
+    <div class="card">
+        <h3>Jami ishlar</h3>
+        <p id="totalJobs">0</p>
+    </div>
+
+    <div class="card">
+        <h3>Press</h3>
+        <p id="pressJobs">0</p>
+    </div>
+
+    <div class="card">
+        <h3>Jatka</h3>
+        <p id="jatkaJobs">0</p>
+    </div>
+
+    <div class="card">
+        <h3>To'langan</h3>
+        <p id="paidJobs">0</p>
+    </div>
+
+    <div class="card">
+        <h3>To'lanmagan</h3>
+        <p id="unpaidJobs">0</p>
+    </div>
+
+</div>
+            <div class="admin-top">
+
+                <input
+                    type="text"
+                    id="search"
+                    placeholder="Qidirish...">
+
+                <button id="downloadExcel">
+                    Excel yuklab olish
+                </button>
+
+                <button id="logoutAdmin">
+                    Chiqish
+                </button>
+
+            </div>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Amallar</th>
+                        <th>Sana</th>
+                        <th>Ishchi</th>
+                        <th>Apparat</th>
+                        <th>Yer egasi</th>
+                        <th>Press soni</th>
+                        <th>Yer maydoni</th>
+                        <th>To'lov</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="tableBody">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- WORKER -->
+
+        <div class="worker-panel">
+
+            <h1>Worker Panel</h1>
+
+            <button id="logoutWorker">
+                Chiqish
+            </button>
+
+            <form id="worker-form">
+
+                <label>Ish turi</label>
+
+                <select id="work-select">
+
+                    <option value="">
+                        Tanlang
+                    </option>
+
+                    <option value="press">
+                        Press apparat
+                    </option>
+
+                    <option value="jatka">
+                        Jatka apparat
+                    </option>
+
+                </select>
+
+                <!-- PRESS -->
+
+                <div class="press">
+
+                    <input
+                        type="number"
+                        id="pressCount"
+                        placeholder="Presslar soni">
+
+                    <input
+                        type="text"
+                        id="pressOwner"
+                        placeholder="Yer egasi">
+
+                    <select id="pressPayment">
+
+                        <option value="">
+                            To'lov
+                        </option>
+
+                        <option value="Ha">
+                            Ha
+                        </option>
+
+                        <option value="Yo'q">
+                            Yo'q
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- JATKA -->
+
+                <div class="jatka">
+
+                    <input
+                        type="number"
+                        id="landArea"
+                        placeholder="Yer maydoni">
+
+                    <input
+                        type="text"
+                        id="jatkaOwner"
+                        placeholder="Yer egasi">
+
+                    <select id="jatkaPayment">
+
+                        <option value="">
+                            To'lov
+                        </option>
+
+                        <option value="Ha">
+                            Ha
+                        </option>
+
+                        <option value="Yo'q">
+                            Yo'q
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <button type="submit">
+                    Yuborish
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div class="modal" id="editModal">
+
+    <div class="modal-box">
+
+        <h2>Ma'lumotni tahrirlash</h2>
+
+        <input type="hidden" id="editId">
+
+        <label>Yer egasi</label>
+        <input type="text" id="editOwner">
+
+        <label>Press soni</label>
+        <input type="number" id="editPress">
+
+        <label>Yer maydoni</label>
+        <input type="number" id="editLand">
+
+        <label>To'lov</label>
+
+        <select id="editPayment">
+            <option value="Ha">Ha</option>
+            <option value="Yo'q">Yo'q</option>
+        </select>
+
+        <div class="modal-buttons">
+
+            <button id="saveEdit">
+                Saqlash
+            </button>
+
+            <button id="closeEdit">
+                Bekor qilish
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+    <script src="script.js"></script>
+</body>
+
+</html>
