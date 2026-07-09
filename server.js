@@ -256,3 +256,31 @@ app.post("/api/login", (req, res) => {
 app.listen(port, () => {
   console.log(`✅ Server ${port}-portda ishlamoqda`);
 });
+
+app.put("/api/workers/:id", (req, res) => {
+  const id = req.params.id;
+
+  const { owner, pressCount, landArea, payment, price } = req.body;
+
+  const sql = `
+    UPDATE workers
+    SET owner = ?,
+        pressCount = ?,
+        landArea = ?,
+        payment = ?,
+        price = ?
+    WHERE id = ?
+  `;
+
+  db.query(sql, [owner, pressCount, landArea, payment, price, id], (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({
+        success: false,
+        error: err.message,
+      });
+    }
+
+    res.json({ success: true });
+  });
+});
