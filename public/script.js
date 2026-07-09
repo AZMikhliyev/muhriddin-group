@@ -280,32 +280,21 @@ function drawTable(data) {
   data.forEach((item) => {
     tableBody.innerHTML += `
 
-        <tr>
+<tr>
 
+<td>${new Date(item.date).toLocaleDateString("uz-UZ")}</td>
+<td>${item.worker}</td>
+<td>${item.type}</td>
+<td>${item.owner}</td>
+<td>${item.pressCount ?? "-"}</td>
+<td>${item.landArea ?? "-"}</td>
+<td>${item.payment}</td>
+<td>${item.price ?? "-"}</td>
 
-    <th>Sana</th>
-    <th>Ishchi</th>
-    <th>Apparat</th>
-    <th>Yer egasi</th>
-    <th>Press soni</th>
-    <th>Yer maydoni</th>
-    <th>To'lov</th>
-    <th>Narxi</th>
-    <th>Amallar</th>
-
-
-
-    <td>
-
-        <button onclick="editWorker(${item.id})">
-            ✏️
-        </button>
-
-        <button onclick="deleteWorker(${item.id})">
-            🗑
-        </button>
-
-    </td>
+<td>
+    <button onclick="editWorker(${item.id})">✏️</button>
+    <button onclick="deleteWorker(${item.id})">🗑</button>
+</td>
 
 </tr>
 
