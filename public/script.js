@@ -59,7 +59,7 @@ loginForm.addEventListener("submit", async function (e) {
     const password = document.getElementById("password").value.trim();
 
     const response = await fetch(
-        "http://localhost:3000/api/login",
+        "/api/login",
         {
             method: "POST",
             headers: {
@@ -351,7 +351,7 @@ async function loadWorkers(){
     try{
 
         const response = await fetch(
-            "http://localhost:3000/api/workers"
+            "/api/workers"
         );
 
         workers = await response.json();
@@ -473,7 +473,7 @@ searchInput.addEventListener("keyup", async () => {
     try{
 
         const response = await fetch(
-            `http://localhost:3000/api/search?q=${encodeURIComponent(text)}`
+            `/api/search?q=${encodeURIComponent(text)}`
         );
 
         const result = await response.json();
@@ -494,7 +494,7 @@ const excelBtn = document.getElementById("downloadExcel");
 
 excelBtn.addEventListener("click",()=>{
 
-    window.location.href="http://localhost:3000/api/excel";
+    window.location.href="/api/excel";
 
 });
 async function deleteWorker(id){
@@ -509,7 +509,7 @@ async function deleteWorker(id){
 
         const response=await fetch(
 
-            `http://localhost:3000/api/workers/${id}`,
+            `/api/workers/${id}`,
 
             {
 
@@ -549,7 +549,7 @@ saveEdit.onclick=async()=>{
 
     const response=await fetch(
 
-        `http://localhost:3000/api/workers/${editId.value}`,
+        `/api/workers/${editId.value}`,
 
         {
 
