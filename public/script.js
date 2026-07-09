@@ -331,13 +331,17 @@ function editWorker(id) {
 function updateDashboard(data) {
   document.getElementById("totalJobs").innerText = data.length;
 
-  document.getElementById("pressJobs").innerText = data.filter(
-    (x) => x.type === "Press",
-  ).length;
+  const totalPress = data.reduce((sum, item) => {
+    return sum + (Number(item.pressCount) || 0);
+  }, 0);
 
-  document.getElementById("jatkaJobs").innerText = data.filter(
-    (x) => x.type === "Jatka",
-  ).length;
+  document.getElementById("pressJobs").innerText = totalPress;
+
+  const totalLand = data.reduce((sum, item) => {
+    return sum + (Number(item.landArea) || 0);
+  }, 0);
+
+  document.getElementById("jatkaJobs").innerText = totalLand.toFixed(2);
 
   document.getElementById("paidJobs").innerText = data.filter(
     (x) => x.payment === "Ha",
@@ -433,5 +437,7 @@ saveEdit.onclick = async () => {
     alert("Server bilan bog'lanib bo'lmadi.");
   }
 };
-
+closeEdit.addEventListener("click", () => {
+  editModal.style.display = "none";
+});
 console.log(editPrice);
