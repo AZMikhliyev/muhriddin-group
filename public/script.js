@@ -226,19 +226,6 @@ workerForm.addEventListener("submit", async function(e){
         }
 
         data = {
-
-            type:"Press",
-
-            owner,
-
-            pressCount,
-
-            landArea:null,
-
-            payment
-
-        };
-        data = {
     type: "Press",
     owner,
     pressCount,
@@ -293,19 +280,6 @@ workerForm.addEventListener("submit", async function(e){
     price: payment === "Ha" ? jatkaPrice.value : null
 };
 
-        data={
-
-            type:"Jatka",
-
-            owner,
-
-            pressCount:null,
-
-            landArea,
-
-            payment
-
-        };
 
     }
 
@@ -449,29 +423,20 @@ function drawTable(data){
 }
 
 function editWorker(id){
+    const worker = workers.find(x => x.id === id);
 
-    const worker=workers.find(x=>x.id===id);
-     console.log(editId);
-    console.log(editOwner);
-    console.log(editPress);
-    console.log(editLand);
-    console.log(editPayment);
+    console.log(worker);
 
-    editId.value=worker.id;
+    console.log("price:", worker.price);
 
-    editOwner.value=worker.owner;
-
-    editPress.value=worker.pressCount ?? "";
-
-    editLand.value=worker.landArea ?? "";
-
-    editPayment.value=worker.payment;
-
-    editModal.style.display="flex";
-
+    editId.value = worker.id;
+    editOwner.value = worker.owner;
+    editPress.value = worker.pressCount ?? "";
+    editLand.value = worker.landArea ?? "";
     editPayment.value = worker.payment;
     editPrice.value = worker.price ?? "";
 
+    editModal.style.display = "flex";
 }
 
 function updateDashboard(data){
@@ -618,3 +583,5 @@ body: JSON.stringify({
         alert("Server bilan bog'lanib bo'lmadi.");
     }
 };
+
+console.log(editPrice);
