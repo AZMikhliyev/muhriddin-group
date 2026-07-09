@@ -296,7 +296,7 @@ data.worker = currentUser.login;
 
     try{
 
-        const response = await fetch("https://muhriddin-group.onrender.com", {
+        const response = await fetch("/api/login", {
 
     method: "POST",
 
@@ -308,7 +308,7 @@ data.worker = currentUser.login;
 
 });
 
-        const result = await response.json();
+    const result = await response.json();
 
         if(result.success){
 
