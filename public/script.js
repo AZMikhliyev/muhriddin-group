@@ -7,9 +7,7 @@ const loginContainer = document.querySelector(".login-container");
 const adminPanel = document.querySelector(".admin");
 const workerPanel = document.querySelector(".worker-panel");
 
-const pressPrice = document.getElementById("pressPrice");
-const jatkaPrice = document.getElementById("jatkaPrice");
-const editPrice = document.getElementById("editPrice");
+
 
 const loginForm = document.getElementById("login-form");
 
@@ -32,7 +30,9 @@ const editLand=document.getElementById("editLand");
 
 const editPayment=document.getElementById("editPayment");
 
-
+const pressPrice = document.getElementById("pressPrice");
+const jatkaPrice = document.getElementById("jatkaPrice");
+const editPrice = document.getElementById("editPrice");
 // =========================
 // SAHIFA OCHILGANDA
 // =========================
