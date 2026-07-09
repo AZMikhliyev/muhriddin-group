@@ -1,282 +1,182 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uz">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Muhriddin Group</title>
 
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
-
+  <body>
     <div class="container">
+      <!-- LOGIN -->
 
-        <!-- LOGIN -->
-
-        <div class="login-container">
-
-            <div class="logo">
-                <img src="./src/assets/img/logo.png" width="200">
-            </div>
-
-            <form id="login-form">
-
-                <label>Login</label>
-                <input
-                    type="text"
-                    id="login"
-                    placeholder="Login">
-
-                <label>Parol</label>
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Parol">
-
-                <button type="submit">
-                    Kirish
-                </button>
-
-            </form>
-
+      <div class="login-container">
+        <div class="logo">
+          <img src="./src/assets/img/logo.png" width="200" />
         </div>
 
-        <!-- ADMIN -->
+        <form id="login-form">
+          <label>Login</label>
+          <input type="text" id="login" placeholder="Login" />
 
-        <div class="admin">
+          <label>Parol</label>
+          <input type="password" id="password" placeholder="Parol" />
 
-            <h1>Admin Panel</h1>
-            <div class="dashboard">
+          <button type="submit">Kirish</button>
+        </form>
+      </div>
 
-    <div class="card">
-        <h3>Jami ishlar</h3>
-        <p id="totalJobs">0</p>
-    </div>
+      <!-- ADMIN -->
 
-    <div class="card">
-        <h3>Press</h3>
-        <p id="pressJobs">0</p>
-    </div>
+      <div class="admin">
+        <h1>Admin Panel</h1>
+        <div class="dashboard">
+          <div class="card">
+            <h3>Jami ishlar</h3>
+            <p id="totalJobs">0</p>
+          </div>
 
-    <div class="card">
-        <h3>Jatka</h3>
-        <p id="jatkaJobs">0</p>
-    </div>
+          <div class="card">
+            <h3>Press</h3>
+            <p id="pressJobs">0</p>
+          </div>
 
-    <div class="card">
-        <h3>To'langan</h3>
-        <p id="paidJobs">0</p>
-    </div>
+          <div class="card">
+            <h3>Jatka</h3>
+            <p id="jatkaJobs">0</p>
+          </div>
 
-    <div class="card">
-        <h3>To'lanmagan</h3>
-        <p id="unpaidJobs">0</p>
-    </div>
+          <div class="card">
+            <h3>To'langan</h3>
+            <p id="paidJobs">0</p>
+          </div>
 
-</div>
-            <div class="admin-top">
+          <div class="card">
+            <h3>To'lanmagan</h3>
+            <p id="unpaidJobs">0</p>
+          </div>
+        </div>
+        <div class="admin-top">
+          <input type="text" id="search" placeholder="Qidirish..." />
 
-                <input
-                    type="text"
-                    id="search"
-                    placeholder="Qidirish...">
+          <button id="downloadExcel">Excel yuklab olish</button>
 
-                <button id="downloadExcel">
-                    Excel yuklab olish
-                </button>
-
-                <button id="logoutAdmin">
-                    Chiqish
-                </button>
-
-            </div>
-
-            <table>
-
-                <thead>
-
-                    <tr>
-                        <th>Amallar</th>
-                        <th>Sana</th>
-                        <th>Ishchi</th>
-                        <th>Apparat</th>
-                        <th>Yer egasi</th>
-                        <th>Press soni</th>
-                        <th>Yer maydoni</th>
-                        <th>To'lov</th>
-                        <th>Narxi</th>
-                    </tr>
-
-                </thead>
-
-                <tbody id="tableBody">
-
-                </tbody>
-
-            </table>
-
+          <button id="logoutAdmin">Chiqish</button>
         </div>
 
-        <!-- WORKER -->
+        <table>
+          <thead>
+            <tr>
+              <th>Amallar</th>
+              <th>Sana</th>
+              <th>Ishchi</th>
+              <th>Apparat</th>
+              <th>Yer egasi</th>
+              <th>Press soni</th>
+              <th>Yer maydoni</th>
+              <th>To'lov</th>
+              <th>Narxi</th>
+            </tr>
+          </thead>
 
-        <div class="worker-panel">
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
 
-            <h1>Worker Panel</h1>
+      <!-- WORKER -->
 
-            <button id="logoutWorker">
-                Chiqish
-            </button>
+      <div class="worker-panel">
+        <h1>Worker Panel</h1>
 
-            <form id="worker-form">
+        <button id="logoutWorker">Chiqish</button>
 
-                <label>Ish turi</label>
+        <form id="worker-form">
+          <label>Ish turi</label>
 
-                <select id="work-select">
+          <select id="work-select">
+            <option value="">Tanlang</option>
 
-                    <option value="">
-                        Tanlang
-                    </option>
+            <option value="press">Press apparat</option>
 
-                    <option value="press">
-                        Press apparat
-                    </option>
+            <option value="jatka">Jatka apparat</option>
+          </select>
 
-                    <option value="jatka">
-                        Jatka apparat
-                    </option>
+          <!-- PRESS -->
 
-                </select>
+          <div class="press">
+            <input type="number" id="pressCount" placeholder="Presslar soni" />
 
-                <!-- PRESS -->
+            <input type="text" id="pressOwner" placeholder="Yer egasi" />
 
-                <div class="press">
+            <select id="pressPayment">
+              <option value="">To'lov</option>
 
-                    <input
-                        type="number"
-                        id="pressCount"
-                        placeholder="Presslar soni">
+              <option value="Ha">Ha</option>
 
-                    <input
-                        type="text"
-                        id="pressOwner"
-                        placeholder="Yer egasi">
+              <option value="Yo'q">Yo'q</option>
+            </select>
+            <input
+              type="number"
+              id="pressPrice"
+              placeholder="Narxi"
+              style="display: none"
+            />
+          </div>
 
-                    <select id="pressPayment">
+          <!-- JATKA -->
 
-                        <option value="">
-                            To'lov
-                        </option>
+          <div class="jatka">
+            <input type="number" id="landArea" placeholder="Yer maydoni" />
 
-                        <option value="Ha">
-                            Ha
-                        </option>
+            <input type="text" id="jatkaOwner" placeholder="Yer egasi" />
 
-                        <option value="Yo'q">
-                            Yo'q
-                        </option>
+            <select id="jatkaPayment">
+              <option value="">To'lov</option>
 
-                    </select>
-                    <input
-                        type="number"
-                        id="pressPrice"
-                        placeholder="Narxi"
-                        style="display:none">
-                </div>
+              <option value="Ha">Ha</option>
 
-                <!-- JATKA -->
+              <option value="Yo'q">Yo'q</option>
+            </select>
+            <input
+              type="number"
+              id="jatkaPrice"
+              placeholder="Narxi"
+              style="display: none"
+            />
+          </div>
 
-                <div class="jatka">
-
-                    <input
-                        type="number"
-                        id="landArea"
-                        placeholder="Yer maydoni">
-
-                    <input
-                        type="text"
-                        id="jatkaOwner"
-                        placeholder="Yer egasi">
-
-                    <select id="jatkaPayment">
-
-                        <option value="">
-                            To'lov
-                        </option>
-
-                        <option value="Ha">
-                            Ha
-                        </option>
-
-                        <option value="Yo'q">
-                            Yo'q
-                        </option>
-
-                    </select>
-                    <input
-    type="number"
-    id="jatkaPrice"
-    placeholder="Narxi"
-    style="display:none">
-
-                </div>
-
-                <button type="submit">
-                    Yuborish
-                </button>
-
-            </form>
-
-        </div>
-
+          <button type="submit">Yuborish</button>
+        </form>
+      </div>
     </div>
-
 
     <div class="modal" id="editModal">
-
-    <div class="modal-box">
-
+      <div class="modal-box">
         <h2>Ma'lumotni tahrirlash</h2>
+        <input type="hidden" id="editId" />
 
-        <input type="hidden" id="editId">
+        <input type="text" id="editOwner" />
 
-        <label>Yer egasi</label>
-        <input type="text" id="editOwner">
+        <input type="number" id="editPress" />
 
-        <label>Press soni</label>
-        <input type="number" id="editPress">
+        <input type="number" id="editLand" />
 
-        <label>Yer maydoni</label>
-        <input type="number" id="editLand">
+        <select id="editPayment">
+          <option value="Ha">Ha</option>
+          <option value="Yo'q">Yo'q</option>
+        </select>
 
-        <label>To'lov</label>
-
-        <select id="pressPayment">
-    <option value="">To'lov</option>
-    <option value="Ha">Ha</option>
-    <option value="Yo'q">Yo'q</option>
-</select>
-
-<label>Narxi</label>
-<input type="number" id="editPrice">
+        <input type="number" id="editPrice" />
 
         <div class="modal-buttons">
+          <button id="saveEdit">Saqlash</button>
 
-            <button id="saveEdit">
-                Saqlash
-            </button>
-
-            <button id="closeEdit">
-                Bekor qilish
-            </button>
-
+          <button id="closeEdit">Bekor qilish</button>
         </div>
-
+      </div>
     </div>
-
-</div>
     <script src="script.js"></script>
-</body>
-
+  </body>
 </html>

@@ -26,11 +26,11 @@ const db = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   ssl: {
-    rejectUnauthorized: false
+    rejectUnauthorized: false,
   },
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
 });
 
 db.getConnection((err, connection) => {
@@ -46,49 +46,54 @@ db.getConnection((err, connection) => {
 // TEST
 // =====================
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // =====================
 // MA'LUMOT QO'SHISH
 // =====================
 app.post("/api/workers", (req, res) => {
-    const { worker, type, owner, pressCount, landArea, payment, price, date } = req.body;
+  const { worker, type, owner, pressCount, landArea, payment, price, date } =
+    req.body;
 
-    const sql = `
+  const sql = `
         INSERT INTO workers
         (worker, type, owner, pressCount, landArea, payment, price, date)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(sql, [worker, type, owner, pressCount, landArea, payment, price, date], (err) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ success: false, error: err.message });
-        }
-        res.json({ success: true });
-    });
+  db.query(
+    sql,
+    [worker, type, owner, pressCount, landArea, payment, price, date],
+    (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ success: false, error: err.message });
+      }
+      res.json({ success: true });
+    },
+  );
 });
 
 // =====================
 // BARCHA MA'LUMOTLAR
 // =====================
 app.get("/api/workers", (req, res) => {
-    db.query("SELECT * FROM workers ORDER BY id DESC", (err, rows) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ success: false, error: err.message });
-        }
-        res.json(rows);
-    });
+  db.query("SELECT * FROM workers ORDER BY id DESC", (err, rows) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ success: false, error: err.message });
+    }
+    res.json(rows);
+  });
 });
 
 // =====================
 // SEARCH
 // =====================
 app.get("/api/search", (req, res) => {
-    const search = req.query.q || "";
-    const sql = `
+  const search = req.query.q || "";
+  const sql = `
         SELECT *
         FROM workers
         WHERE
@@ -102,140 +107,152 @@ app.get("/api/search", (req, res) => {
             OR CAST(date AS CHAR) LIKE ?
         ORDER BY id DESC
     `;
-    const value = `%${search}%`;
-    db.query(sql, [value, value, value, value, value, value, value, value], (err, result) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ success: false, error: err.message });
-        }
-        res.json(result);
-    });
+  const value = `%${search}%`;
+  db.query(
+    sql,
+    [value, value, value, value, value, value, value, value],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ success: false, error: err.message });
+      }
+      res.json(result);
+    },
+  );
 });
 
 // =====================
 // EXCEL YUKLAB OLISH
 // =====================
 app.get("/api/excel", (req, res) => {
-    db.query("SELECT * FROM workers ORDER BY id DESC", async (err, rows) => {
-        if (err) {
-            return res.status(500).send("Xatolik");
-        }
+  db.query("SELECT * FROM workers ORDER BY id DESC", async (err, rows) => {
+    if (err) {
+      return res.status(500).send("Xatolik");
+    }
 
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet("Workers");
-        worksheet.columns = [
-            { header: "Sana", key: "date", width: 15 },
-            { header: "Ishchi", key: "worker", width: 20 },
-            { header: "Ish turi", key: "type", width: 20 },
-            { header: "Yer egasi", key: "owner", width: 25 },
-            { header: "Press soni", key: "pressCount", width: 15 },
-            { header: "Yer maydoni", key: "landArea", width: 15 },
-            { header: "To'lov", key: "payment", width: 15 },
-            { header: "Narxi", key: "price", width: 15 }
-        ];
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Workers");
+    worksheet.columns = [
+      { header: "Sana", key: "date", width: 15 },
+      { header: "Ishchi", key: "worker", width: 20 },
+      { header: "Ish turi", key: "type", width: 20 },
+      { header: "Yer egasi", key: "owner", width: 25 },
+      { header: "Press soni", key: "pressCount", width: 15 },
+      { header: "Yer maydoni", key: "landArea", width: 15 },
+      { header: "To'lov", key: "payment", width: 15 },
+      { header: "Narxi", key: "price", width: 15 },
+    ];
 
-        rows.forEach(item => {
-            worksheet.addRow({
-                date: new Date(item.date).toLocaleDateString("uz-UZ"),
-                worker: item.worker,
-                type: item.type,
-                owner: item.owner,
-                pressCount: item.pressCount ?? "-",
-                landArea: item.landArea ?? "-",
-                payment: item.payment,
-                price: item.price ?? "-"
-            });
-        });
-
-        res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        res.setHeader("Content-Disposition", "attachment; filename=workers.xlsx");
-        await workbook.xlsx.write(res);
-        res.end();
+    rows.forEach((item) => {
+      worksheet.addRow({
+        date: new Date(item.date).toLocaleDateString("uz-UZ"),
+        worker: item.worker,
+        type: item.type,
+        owner: item.owner,
+        pressCount: item.pressCount ?? "-",
+        landArea: item.landArea ?? "-",
+        payment: item.payment,
+        price: item.price ?? "-",
+      });
     });
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    );
+    res.setHeader("Content-Disposition", "attachment; filename=workers.xlsx");
+    await workbook.xlsx.write(res);
+    res.end();
+  });
 });
 
 // =====================
 // DELETE
 // =====================
 app.delete("/api/workers/:id", (req, res) => {
-    const id = req.params.id;
-    db.query("DELETE FROM workers WHERE id=?", [id], (err) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ success: false, error: err.message });
-        }
-        res.json({ success: true });
-    });
+  const id = req.params.id;
+  db.query("DELETE FROM workers WHERE id=?", [id], (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ success: false, error: err.message });
+    }
+    res.json({ success: true });
+  });
 });
 
 // =====================
 // UPDATE
 // =====================
 app.post("/api/workers", (req, res) => {
-    const { worker, type, owner, pressCount, landArea, payment, price, date } = req.body;
+  const { worker, type, owner, pressCount, landArea, payment, price, date } =
+    req.body;
 
-    const sql = `
+  const sql = `
         INSERT INTO workers
         (worker, type, owner, pressCount, landArea, payment, price, date)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(sql, [worker, type, owner, pressCount, landArea, payment, price, date], (err) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).json({ success: false, error: err.message });
-        }
-        res.json({ success: true });
-    });
+  db.query(
+    sql,
+    [worker, type, owner, pressCount, landArea, payment, price, date],
+    (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ success: false, error: err.message });
+      }
+      res.json({ success: true });
+    },
+  );
 });
 
 // =====================
 // LOGIN
 // =====================
 app.post("/api/login", (req, res) => {
-    const { login, password } = req.body;
+  const { login, password } = req.body;
 
-    if (!login || !password) {
-        return res.status(400).json({
-            success: false,
-            message: "Login va password talab qilinadi"
+  if (!login || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Login va password talab qilinadi",
+    });
+  }
+
+  db.query(
+    "SELECT * FROM users WHERE login=? AND password=?",
+    [login, password],
+    (err, rows) => {
+      if (err) {
+        console.error("Login xatosi:", err);
+        return res.status(500).json({
+          success: false,
+          message: "Server xatosi: " + err.message,
         });
-    }
+      }
 
-    db.query(
-        "SELECT * FROM users WHERE login=? AND password=?",
-        [login, password],
-        (err, rows) => {
-            if (err) {
-                console.error("Login xatosi:", err);
-                return res.status(500).json({
-                    success: false,
-                    message: "Server xatosi: " + err.message
-                });
-            }
+      if (rows.length === 0) {
+        return res.status(401).json({
+          success: false,
+          message: "Login yoki password noto'g'ri",
+        });
+      }
 
-            if (rows.length === 0) {
-                return res.status(401).json({
-                    success: false,
-                    message: "Login yoki password noto'g'ri"
-                });
-            }
-
-            res.json({
-                success: true,
-                user: {
-                    id: rows[0].id,
-                    login: rows[0].login,
-                    role: rows[0].role
-                }
-            });
-        }
-    );
+      res.json({
+        success: true,
+        user: {
+          id: rows[0].id,
+          login: rows[0].login,
+          role: rows[0].role,
+        },
+      });
+    },
+  );
 });
 
 // =====================
 // SERVER ISHGA TUSHIRISH
 // =====================
 app.listen(port, () => {
-    console.log(`✅ Server ${port}-portda ishlamoqda`);
+  console.log(`✅ Server ${port}-portda ishlamoqda`);
 });
