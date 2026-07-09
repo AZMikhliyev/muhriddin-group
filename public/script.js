@@ -426,7 +426,7 @@ function editWorker(id){
     const worker = workers.find(x => x.id === id);
 
     console.log(worker);
-
+    
     console.log("price:", worker.price);
 
     editId.value = worker.id;
@@ -435,7 +435,14 @@ function editWorker(id){
     editLand.value = worker.landArea ?? "";
     editPayment.value = worker.payment;
     editPrice.value = worker.price ?? "";
-
+console.log({
+    editId,
+    editOwner,
+    editPress,
+    editLand,
+    editPayment,
+    editPrice
+});
     editModal.style.display = "flex";
 }
 
