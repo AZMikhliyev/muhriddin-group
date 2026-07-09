@@ -30,6 +30,18 @@ const db = mysql.createConnection({
   }
 });
 
+db.connect((err) => {
+  if (err) {
+    console.error("❌ MySQL ulanish xatosi:", err.message);
+    return;
+  }
+  console.log("✅ MySQL bazasiga muvaffaqiyatli ulandi!");
+});
+
+db.on("error", (err) => {
+  console.error("❌ MySQL runtime xatosi:", err.message);
+});
+
 // =====================
 // TEST
 // =====================
