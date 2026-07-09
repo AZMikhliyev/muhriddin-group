@@ -545,48 +545,37 @@ closeEdit.onclick=()=>{
 
 };
 
-saveEdit.onclick=async()=>{
+saveEdit.onclick = async () => {
 
-    const response=await fetch(
+    try {
+        const response = await fetch(
+            `/api/workers/${editId.value}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    owner: editOwner.value,
+                    pressCount: editPress.value,
+                    landArea: editLand.value,
+                    payment: editPayment.value
+                })
+            }
+        );
 
-        `/api/workers/${editId.value}`,
+        const result = await response.json();
 
-        {
-
-            method:"PUT",
-
-            headers:{
-
-                "Content-Type":"application/json"
-
-            },
-
-            body:JSON.stringify({
-
-                owner:editOwner.value,
-
-                pressCount:editPress.value,
-
-                landArea:editLand.value,
-
-                payment:editPayment.value
-
-            })
-
+        if (result.success) {
+            editModal.style.display = "none";
+            loadWorkers();
+            alert("Ma'lumot yangilandi.");
+        } else {
+            alert("Xato: " + (result.error || "Noma'lum xato"));
         }
 
-    );
-
-    const result=await response.json();
-
-    if(result.success){
-
-        editModal.style.display="none";
-
-        loadWorkers();
-
-        alert("Ma'lumot yangilandi.");
-
+    } catch (error) {
+        console.log(error);
+        alert("Server bilan bog'lanib bo'lmadi.");
     }
-
 };
