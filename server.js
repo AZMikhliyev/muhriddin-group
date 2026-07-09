@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // MYSQL ULASH
 // =====================
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
@@ -27,19 +27,19 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
   ssl: {
     rejectUnauthorized: false
-  }
+  },
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-db.connect((err) => {
+db.getConnection((err, connection) => {
   if (err) {
     console.error("❌ MySQL ulanish xatosi:", err.message);
     return;
   }
   console.log("✅ MySQL bazasiga muvaffaqiyatli ulandi!");
-});
-
-db.on("error", (err) => {
-  console.error("❌ MySQL runtime xatosi:", err.message);
+  connection.release();
 });
 
 // =====================
@@ -53,15 +53,15 @@ app.get("/", (req, res) => {
 // MA'LUMOT QO'SHISH
 // =====================
 app.post("/api/workers", (req, res) => {
-    const { worker, type, owner, pressCount, landArea, payment, date } = req.body;
+    const { worker, type, owner, pressCount, landArea, payment, price, date } = req.body;
 
     const sql = `
         INSERT INTO workers
-        (worker, type, owner, pressCount, landArea, payment, date)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        (worker, type, owner, pressCount, landArea, payment, price, date)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(sql, [worker, type, owner, pressCount, landArea, payment, date], (err) => {
+    db.query(sql, [worker, type, owner, pressCount, landArea, payment, price, date], (err) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ success: false, error: err.message });
@@ -98,11 +98,12 @@ app.get("/api/search", (req, res) => {
             OR payment LIKE ?
             OR CAST(pressCount AS CHAR) LIKE ?
             OR CAST(landArea AS CHAR) LIKE ?
+            OR CAST(price AS CHAR) LIKE ?
             OR CAST(date AS CHAR) LIKE ?
         ORDER BY id DESC
     `;
     const value = `%${search}%`;
-    db.query(sql, [value, value, value, value, value, value, value], (err, result) => {
+    db.query(sql, [value, value, value, value, value, value, value, value], (err, result) => {
         if (err) {
             console.log(err);
             return res.status(500).json({ success: false, error: err.message });
@@ -129,7 +130,8 @@ app.get("/api/excel", (req, res) => {
             { header: "Yer egasi", key: "owner", width: 25 },
             { header: "Press soni", key: "pressCount", width: 15 },
             { header: "Yer maydoni", key: "landArea", width: 15 },
-            { header: "To'lov", key: "payment", width: 15 }
+            { header: "To'lov", key: "payment", width: 15 },
+            { header: "Narxi", key: "price", width: 15 }
         ];
 
         rows.forEach(item => {
@@ -140,7 +142,8 @@ app.get("/api/excel", (req, res) => {
                 owner: item.owner,
                 pressCount: item.pressCount ?? "-",
                 landArea: item.landArea ?? "-",
-                payment: item.payment
+                payment: item.payment,
+                price: item.price ?? "-"
             });
         });
 
@@ -168,30 +171,22 @@ app.delete("/api/workers/:id", (req, res) => {
 // =====================
 // UPDATE
 // =====================
-app.put("/api/workers/:id", (req, res) => {
-    const id = req.params.id;
-    let { owner, pressCount, landArea, payment } = req.body;
+app.post("/api/workers", (req, res) => {
+    const { worker, type, owner, pressCount, landArea, payment, price, date } = req.body;
 
-    // Bo'sh qiymatlarni null qilib qo'yamiz
-    pressCount = pressCount === "" ? null : pressCount;
-    landArea = landArea === "" ? null : landArea;
+    const sql = `
+        INSERT INTO workers
+        (worker, type, owner, pressCount, landArea, payment, price, date)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
-    db.query(
-        `UPDATE workers
-         SET owner=?,
-             pressCount=?,
-             landArea=?,
-             payment=?
-         WHERE id=?`,
-        [owner, pressCount, landArea, payment, id],
-        (err) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).json({ success: false, error: err.message });
-            }
-            res.json({ success: true });
+    db.query(sql, [worker, type, owner, pressCount, landArea, payment, price, date], (err) => {
+        if (err) {
+            console.log(err);
+            return res.status(500).json({ success: false, error: err.message });
         }
-    );
+        res.json({ success: true });
+    });
 });
 
 // =====================

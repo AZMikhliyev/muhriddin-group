@@ -106,7 +106,7 @@
                         <th>Press soni</th>
                         <th>Yer maydoni</th>
                         <th>To'lov</th>
-
+                        <th>Narxi</th>
                     </tr>
 
                 </thead>
@@ -178,7 +178,11 @@
                         </option>
 
                     </select>
-
+                    <input
+                        type="number"
+                        id="pressPrice"
+                        placeholder="Narxi"
+                        style="display:none">
                 </div>
 
                 <!-- JATKA -->
@@ -210,6 +214,11 @@
                         </option>
 
                     </select>
+                    <input
+    type="number"
+    id="jatkaPrice"
+    placeholder="Narxi"
+    style="display:none">
 
                 </div>
 
@@ -243,10 +252,14 @@
 
         <label>To'lov</label>
 
-        <select id="editPayment">
-            <option value="Ha">Ha</option>
-            <option value="Yo'q">Yo'q</option>
-        </select>
+        <select id="pressPayment">
+    <option value="">To'lov</option>
+    <option value="Ha">Ha</option>
+    <option value="Yo'q">Yo'q</option>
+</select>
+
+<label>Narxi</label>
+<input type="number" id="editPrice">
 
         <div class="modal-buttons">
 

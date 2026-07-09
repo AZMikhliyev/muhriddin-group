@@ -7,6 +7,10 @@ const loginContainer = document.querySelector(".login-container");
 const adminPanel = document.querySelector(".admin");
 const workerPanel = document.querySelector(".worker-panel");
 
+const pressPrice = document.getElementById("pressPrice");
+const jatkaPrice = document.getElementById("jatkaPrice");
+const editPrice = document.getElementById("editPrice");
+
 const loginForm = document.getElementById("login-form");
 
 const logoutAdmin = document.getElementById("logoutAdmin");
@@ -157,6 +161,16 @@ workSelect.addEventListener("change", function(){
     }
 
 });
+
+document.getElementById("pressPayment").addEventListener("change", function () {
+    pressPrice.style.display = this.value === "Ha" ? "block" : "none";
+    if (this.value !== "Ha") pressPrice.value = "";
+});
+
+document.getElementById("jatkaPayment").addEventListener("change", function () {
+    jatkaPrice.style.display = this.value === "Ha" ? "block" : "none";
+    if (this.value !== "Ha") jatkaPrice.value = "";
+});
 // =========================
 // WORKER FORM
 // =========================
@@ -224,6 +238,14 @@ workerForm.addEventListener("submit", async function(e){
             payment
 
         };
+        data = {
+    type: "Press",
+    owner,
+    pressCount,
+    landArea: null,
+    payment,
+    price: payment === "Ha" ? pressPrice.value : null
+};
 
     }
 
@@ -262,6 +284,14 @@ workerForm.addEventListener("submit", async function(e){
             return;
 
         }
+        data = {
+    type: "Jatka",
+    owner,
+    pressCount: null,
+    landArea,
+    payment,
+    price: payment === "Ha" ? jatkaPrice.value : null
+};
 
         data={
 
@@ -310,17 +340,21 @@ data.worker = currentUser.login;
 
     const result = await response.json();
 
-        if(result.success){
+       if(result.success){
 
-            alert("Ma'lumot muvaffaqiyatli yuborildi.");
+    alert("Ma'lumot muvaffaqiyatli yuborildi.");
 
-            workerForm.reset();
+    workerForm.reset();
 
-            pressForm.style.display="none";
+    pressForm.style.display="none";
 
-            jatkaForm.style.display="none";
+    jatkaForm.style.display="none";
 
-        }
+    pressPrice.style.display="none";
+
+    jatkaPrice.style.display="none";
+
+}
 
         else{
 
@@ -391,6 +425,7 @@ function drawTable(data){
     <td>${item.landArea ?? "-"}</td>
 
     <td>${item.payment}</td>
+    <td>${item.price ?? "-"}</td>
 
     <td>
 
@@ -433,6 +468,9 @@ function editWorker(id){
     editPayment.value=worker.payment;
 
     editModal.style.display="flex";
+
+    editPayment.value = worker.payment;
+    editPrice.value = worker.price ?? "";
 
 }
 
@@ -555,12 +593,13 @@ saveEdit.onclick = async () => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({
-                    owner: editOwner.value,
-                    pressCount: editPress.value,
-                    landArea: editLand.value,
-                    payment: editPayment.value
-                })
+body: JSON.stringify({
+    owner: editOwner.value,
+    pressCount: editPress.value,
+    landArea: editLand.value,
+    payment: editPayment.value,
+    price: editPayment.value === "Ha" ? editPrice.value : null
+})
             }
         );
 
