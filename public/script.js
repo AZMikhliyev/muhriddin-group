@@ -296,7 +296,7 @@ data.worker = currentUser.login;
 
     try{
 
-        const response = await fetch("/api/login", {
+        const response = await fetch("/api/workers", {
 
     method: "POST",
 
