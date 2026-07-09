@@ -170,7 +170,12 @@ app.delete("/api/workers/:id", (req, res) => {
 // =====================
 app.put("/api/workers/:id", (req, res) => {
     const id = req.params.id;
-    const { owner, pressCount, landArea, payment } = req.body;
+    let { owner, pressCount, landArea, payment } = req.body;
+
+    // Bo'sh qiymatlarni null qilib qo'yamiz
+    pressCount = pressCount === "" ? null : pressCount;
+    landArea = landArea === "" ? null : landArea;
+
     db.query(
         `UPDATE workers
          SET owner=?,
