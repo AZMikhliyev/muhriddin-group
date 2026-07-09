@@ -36,9 +36,9 @@ window.onload = () => {
   workerPanel.style.display = "none";
 };
 
-function closeEdit() {
-  document.querySelector(".edit-modal").style.display = "none";
-}
+closeEdit.addEventListener("click", () => {
+  editModal.style.display = "none";
+});
 // =========================
 // LOGIN
 // =========================
@@ -437,7 +437,5 @@ saveEdit.onclick = async () => {
     alert("Server bilan bog'lanib bo'lmadi.");
   }
 };
-closeEdit.addEventListener("click", () => {
-  editModal.style.display = "none";
-});
+
 console.log(editPrice);
