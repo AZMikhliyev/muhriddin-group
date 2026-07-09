@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // MYSQL ULASH
 // =====================
 
-const connection = mysql.createConnection({
+const db = mysql.createConnection({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
