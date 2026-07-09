@@ -225,7 +225,8 @@ app.post("/api/login", (req, res) => {
                 success: true,
                 user: {
                     id: rows[0].id,
-                    login: rows[0].login
+                    login: rows[0].login,
+                    role: rows[0].role
                 }
             });
         }
