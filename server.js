@@ -181,6 +181,16 @@ app.delete("/api/workers/:id", (req, res) => {
   });
 });
 
+function drawMyTable(data) {
+  const body = document.getElementById("myTableBody");
+  body.innerHTML = "";
+
+  data.forEach((item) => {
+    const diffMin = (Date.now() - new Date(item.createdAt).getTime()) / 60000;
+    const editable = diffMin <= 300;
+    // ... qolgani avvalgidek
+  });
+}
 // =====================
 // UPDATE
 app.post("/api/workers", (req, res) => {
@@ -306,53 +316,104 @@ app.put("/api/workers/:id", (req, res) => {
 });
 app.get("/api/workers/mine", (req, res) => {
   const login = req.query.login;
-  db.query("SELECT * FROM workers WHERE worker=? ORDER BY id DESC", [login], (err, rows) => {
-    if (err) return res.status(500).json({ success: false, error: err.message });
+  const sql = `
+    SELECT * FROM workers
+    WHERE worker = ?
+      AND createdAt >= (NOW() - INTERVAL 5 HOUR)
+    ORDER BY id DESC
+  `;
+  db.query(sql, [login], (err, rows) => {
+    if (err)
+      return res.status(500).json({ success: false, error: err.message });
     res.json(rows);
   });
 });
 
 app.put("/api/workers/own/:id", (req, res) => {
   const id = req.params.id;
-  const { login, owner, clientPhone, pressCount, landArea, payment, price, date } = req.body;
+  const {
+    login,
+    owner,
+    clientPhone,
+    pressCount,
+    landArea,
+    payment,
+    price,
+    date,
+  } = req.body;
 
-  db.query("SELECT * FROM workers WHERE id=? AND worker=?", [id, login], (err, rows) => {
-    if (err) return res.status(500).json({ success: false, error: err.message });
-    if (rows.length === 0)
-      return res.status(403).json({ success: false, message: "Bu yozuv sizga tegishli emas" });
+  db.query(
+    "SELECT * FROM workers WHERE id=? AND worker=?",
+    [id, login],
+    (err, rows) => {
+      if (err)
+        return res.status(500).json({ success: false, error: err.message });
+      if (rows.length === 0)
+        return res
+          .status(403)
+          .json({ success: false, message: "Bu yozuv sizga tegishli emas" });
 
-    const diffMin = (Date.now() - new Date(rows[0].createdAt).getTime()) / 60000;
-    if (diffMin > 300)
-      return res.status(403).json({ success: false, message: "5 soatlik muddat tugagan" });
+      const diffMin =
+        (Date.now() - new Date(rows[0].createdAt).getTime()) / 60000;
+      if (diffMin > 300)
+        return res
+          .status(403)
+          .json({ success: false, message: "5 soatlik muddat tugagan" });
 
-    const sql = `
+      const sql = `
       UPDATE workers
       SET owner=?, clientPhone=?, pressCount=?, landArea=?, payment=?, price=?, date=?
       WHERE id=?
     `;
-    db.query(sql, [owner, clientPhone || null, pressCount, landArea, payment, price, date, id], (err) => {
-      if (err) return res.status(500).json({ success: false, error: err.message });
-      res.json({ success: true });
-    });
-  });
+      db.query(
+        sql,
+        [
+          owner,
+          clientPhone || null,
+          pressCount,
+          landArea,
+          payment,
+          price,
+          date,
+          id,
+        ],
+        (err) => {
+          if (err)
+            return res.status(500).json({ success: false, error: err.message });
+          res.json({ success: true });
+        },
+      );
+    },
+  );
 });
 
 app.delete("/api/workers/own/:id", (req, res) => {
   const id = req.params.id;
   const login = req.query.login;
 
-  db.query("SELECT * FROM workers WHERE id=? AND worker=?", [id, login], (err, rows) => {
-    if (err) return res.status(500).json({ success: false, error: err.message });
-    if (rows.length === 0)
-      return res.status(403).json({ success: false, message: "Bu yozuv sizga tegishli emas" });
+  db.query(
+    "SELECT * FROM workers WHERE id=? AND worker=?",
+    [id, login],
+    (err, rows) => {
+      if (err)
+        return res.status(500).json({ success: false, error: err.message });
+      if (rows.length === 0)
+        return res
+          .status(403)
+          .json({ success: false, message: "Bu yozuv sizga tegishli emas" });
 
-    const diffMin = (Date.now() - new Date(rows[0].createdAt).getTime()) / 60000;
-    if (diffMin > 300)
-      return res.status(403).json({ success: false, message: "5 soatlik muddat tugagan" });
+      const diffMin =
+        (Date.now() - new Date(rows[0].createdAt).getTime()) / 60000;
+      if (diffMin > 300)
+        return res
+          .status(403)
+          .json({ success: false, message: "5 soatlik muddat tugagan" });
 
-    db.query("DELETE FROM workers WHERE id=?", [id], (err) => {
-      if (err) return res.status(500).json({ success: false, error: err.message });
-      res.json({ success: true });
-    });
-  });
+      db.query("DELETE FROM workers WHERE id=?", [id], (err) => {
+        if (err)
+          return res.status(500).json({ success: false, error: err.message });
+        res.json({ success: true });
+      });
+    },
+  );
 });
