@@ -19,6 +19,8 @@ const jatkaForm = document.querySelector(".jatka");
 const editModal = document.getElementById("editModal");
 
 const editId = document.getElementById("editId");
+const editDate = document.getElementById("editDate");
+const editPhone = document.getElementById("editPhone");
 const editOwner = document.getElementById("editOwner");
 const editPress = document.getElementById("editPress");
 const editLand = document.getElementById("editLand");
