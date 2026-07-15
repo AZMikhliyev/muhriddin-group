@@ -303,6 +303,14 @@ tbody tr:hover {
 /* ========================= */
 /* SEARCH */
 /* ========================= */
+select option {
+  background: #374151;
+  color: #fff;
+}
+
+select {
+  color-scheme: dark;
+}
 
 #search {
   font-size: 15px;
