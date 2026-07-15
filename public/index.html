@@ -93,29 +93,24 @@
         <button id="logoutWorker">Chiqish</button>
 
         <form id="worker-form">
+          <label>Sana</label>
+          <input type="date" id="workDate" />
+
           <label>Ish turi</label>
-
           <select id="work-select">
-            <option value="">Tanlang</option>
-
-            <option value="press">Press apparat</option>
-
-            <option value="jatka">Jatka apparat</option>
+            ...
           </select>
-
-          <!-- PRESS -->
 
           <div class="press">
             <input type="number" id="pressCount" placeholder="Presslar soni" />
-
             <input type="text" id="pressOwner" placeholder="Yer egasi" />
-
+            <input
+              type="text"
+              id="pressPhone"
+              placeholder="Mijoz telefon raqami"
+            />
             <select id="pressPayment">
-              <option value="">To'lov</option>
-
-              <option value="Ha">Ha</option>
-
-              <option value="Yo'q">Yo'q</option>
+              ...
             </select>
             <input
               type="number"
@@ -125,19 +120,16 @@
             />
           </div>
 
-          <!-- JATKA -->
-
           <div class="jatka">
             <input type="number" id="landArea" placeholder="Yer maydoni" />
-
             <input type="text" id="jatkaOwner" placeholder="Yer egasi" />
-
+            <input
+              type="text"
+              id="jatkaPhone"
+              placeholder="Mijoz telefon raqami"
+            />
             <select id="jatkaPayment">
-              <option value="">To'lov</option>
-
-              <option value="Ha">Ha</option>
-
-              <option value="Yo'q">Yo'q</option>
+              ...
             </select>
             <input
               type="number"
@@ -149,6 +141,23 @@
 
           <button type="submit">Yuborish</button>
         </form>
+
+        <h2>Mening yuborganlarim</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Sana</th>
+              <th>Yer egasi</th>
+              <th>Telefon</th>
+              <th>Press</th>
+              <th>Yer</th>
+              <th>To'lov</th>
+              <th>Narxi</th>
+              <th>Amallar</th>
+            </tr>
+          </thead>
+          <tbody id="myTableBody"></tbody>
+        </table>
       </div>
     </div>
 
@@ -160,8 +169,8 @@
         <input type="text" id="editOwner" />
 
         <input type="number" id="editPress" />
-
         <input type="number" id="editLand" />
+        <input type="text" id="editPhone" placeholder="Telefon" />
 
         <select id="editPayment">
           <option value="Ha">Ha</option>

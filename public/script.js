@@ -215,12 +215,19 @@ workerForm.addEventListener("submit", async function (e) {
   // =========================
   // LOGIN BO'LGAN ISHCHI
   // =========================
-
+  data.date =
+    document.getElementById("workDate").value ||
+    new Date().toISOString().split("T")[0];
+  data.clientPhone =
+    type === "press"
+      ? document.getElementById("pressPhone").value.trim()
+      : document.getElementById("jatkaPhone").value.trim();
   data.worker = currentUser.login;
   // =========================
   // SERVERGA YUBORISH
   // =========================
-
+  document.getElementById("workDate").value = "";
+  loadMyWorkers();
   try {
     const response = await fetch("/api/workers", {
       method: "POST",
@@ -273,7 +280,76 @@ async function loadWorkers() {
     console.log(error);
   }
 }
+async function loadMyWorkers() {
+  const res = await fetch(
+    `/api/workers/mine?login=${encodeURIComponent(currentUser.login)}`,
+  );
+  const data = await res.json();
+  drawMyTable(data);
+}
 
+function drawMyTable(data) {
+  const body = document.getElementById("myTableBody");
+  body.innerHTML = "";
+
+  data.forEach((item) => {
+    const diffMin = (Date.now() - new Date(item.createdAt).getTime()) / 60000;
+    const editable = diffMin <= 300;
+
+    body.innerHTML += `
+      <tr>
+        <td>${new Date(item.date).toLocaleDateString("uz-UZ")}</td>
+        <td>${item.owner}</td>
+        <td>${item.clientPhone ?? "-"}</td>
+        <td>${item.pressCount ?? "-"}</td>
+        <td>${item.landArea ?? "-"}</td>
+        <td>${item.payment}</td>
+        <td>${item.price ?? "-"}</td>
+        <td>
+          ${
+            editable
+              ? `<button onclick="editMyWorker(${item.id})">✏️</button>
+               <button onclick="deleteMyWorker(${item.id})">🗑</button>`
+              : `<span style="color:#9ca3af">Muddat tugagan</span>`
+          }
+        </td>
+      </tr>`;
+  });
+}
+
+let myWorkers = [];
+async function editMyWorker(id) {
+  const res = await fetch(
+    `/api/workers/mine?login=${encodeURIComponent(currentUser.login)}`,
+  );
+  myWorkers = await res.json();
+  const w = myWorkers.find((x) => x.id === id);
+
+  editId.value = w.id;
+  editDate.value = w.date.split("T")[0];
+  editOwner.value = w.owner;
+  editPhone.value = w.clientPhone ?? "";
+  editPress.value = w.pressCount ?? "";
+  editLand.value = w.landArea ?? "";
+  editPayment.value = w.payment;
+  editPrice.value = w.price ?? "";
+  editModal.dataset.mode = "own"; // admin/o'z rejimini ajratish uchun
+  editModal.style.display = "flex";
+}
+
+async function deleteMyWorker(id) {
+  if (!confirm("Rostdan ham o'chirilsinmi?")) return;
+  const res = await fetch(
+    `/api/workers/own/${id}?login=${encodeURIComponent(currentUser.login)}`,
+    { method: "DELETE" },
+  );
+  const result = await res.json();
+  if (result.success) {
+    loadMyWorkers();
+  } else {
+    alert(result.message || "Xatolik");
+  }
+}
 function drawTable(data) {
   tableBody.innerHTML = "";
 
@@ -408,33 +484,35 @@ closeEdit.onclick = () => {
 };
 
 saveEdit.onclick = async () => {
-  try {
-    const response = await fetch(`/api/workers/${editId.value}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        owner: editOwner.value,
-        pressCount: editPress.value,
-        landArea: editLand.value,
-        payment: editPayment.value,
-        price: editPayment.value === "Ha" ? editPrice.value : null,
-      }),
-    });
+  const isOwn = editModal.dataset.mode === "own";
+  const url = isOwn
+    ? `/api/workers/own/${editId.value}`
+    : `/api/workers/${editId.value}`;
 
-    const result = await response.json();
+  const body = {
+    owner: editOwner.value,
+    clientPhone: editPhone.value,
+    pressCount: editPress.value,
+    landArea: editLand.value,
+    payment: editPayment.value,
+    price: editPayment.value === "Ha" ? editPrice.value : null,
+    date: editDate.value,
+  };
+  if (isOwn) body.login = currentUser.login;
 
-    if (result.success) {
-      editModal.style.display = "none";
-      loadWorkers();
-      alert("Ma'lumot yangilandi.");
-    } else {
-      alert("Xato: " + (result.error || "Noma'lum xato"));
-    }
-  } catch (error) {
-    console.log(error);
-    alert("Server bilan bog'lanib bo'lmadi.");
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+
+  const result = await response.json();
+  if (result.success) {
+    editModal.style.display = "none";
+    isOwn ? loadMyWorkers() : loadWorkers();
+    alert("Ma'lumot yangilandi.");
+  } else {
+    alert(result.message || result.error || "Xato");
   }
 };
 

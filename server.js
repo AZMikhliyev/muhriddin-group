@@ -141,6 +141,7 @@ app.get("/api/excel", (req, res) => {
       { header: "Yer maydoni", key: "landArea", width: 15 },
       { header: "To'lov", key: "payment", width: 15 },
       { header: "Narxi", key: "price", width: 15 },
+      { header: "Telefon", key: "clientPhone", width: 18 },
     ];
 
     rows.forEach((item) => {
@@ -182,25 +183,41 @@ app.delete("/api/workers/:id", (req, res) => {
 
 // =====================
 // UPDATE
-// =====================
 app.post("/api/workers", (req, res) => {
-  const { worker, type, owner, pressCount, landArea, payment, price, date } =
-    req.body;
+  const {
+    worker,
+    type,
+    owner,
+    pressCount,
+    landArea,
+    payment,
+    price,
+    date,
+    clientPhone,
+  } = req.body;
 
   const sql = `
-        INSERT INTO workers
-        (worker, type, owner, pressCount, landArea, payment, price, date)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `;
+    INSERT INTO workers
+    (worker, type, owner, clientPhone, pressCount, landArea, payment, price, date)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
 
   db.query(
     sql,
-    [worker, type, owner, pressCount, landArea, payment, price, date],
+    [
+      worker,
+      type,
+      owner,
+      clientPhone || null,
+      pressCount,
+      landArea,
+      payment,
+      price,
+      date,
+    ],
     (err) => {
-      if (err) {
-        console.log(err);
+      if (err)
         return res.status(500).json({ success: false, error: err.message });
-      }
       res.json({ success: true });
     },
   );
@@ -259,28 +276,83 @@ app.listen(port, () => {
 
 app.put("/api/workers/:id", (req, res) => {
   const id = req.params.id;
-
-  const { owner, pressCount, landArea, payment, price } = req.body;
+  const { owner, clientPhone, pressCount, landArea, payment, price, date } =
+    req.body;
 
   const sql = `
     UPDATE workers
-    SET owner = ?,
-        pressCount = ?,
-        landArea = ?,
-        payment = ?,
-        price = ?
+    SET owner = ?, clientPhone = ?, pressCount = ?, landArea = ?, payment = ?, price = ?, date = ?
     WHERE id = ?
   `;
 
-  db.query(sql, [owner, pressCount, landArea, payment, price, id], (err) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({
-        success: false,
-        error: err.message,
-      });
-    }
+  db.query(
+    sql,
+    [
+      owner,
+      clientPhone || null,
+      pressCount,
+      landArea,
+      payment,
+      price,
+      date,
+      id,
+    ],
+    (err) => {
+      if (err)
+        return res.status(500).json({ success: false, error: err.message });
+      res.json({ success: true });
+    },
+  );
+});
+app.get("/api/workers/mine", (req, res) => {
+  const login = req.query.login;
+  db.query("SELECT * FROM workers WHERE worker=? ORDER BY id DESC", [login], (err, rows) => {
+    if (err) return res.status(500).json({ success: false, error: err.message });
+    res.json(rows);
+  });
+});
 
-    res.json({ success: true });
+app.put("/api/workers/own/:id", (req, res) => {
+  const id = req.params.id;
+  const { login, owner, clientPhone, pressCount, landArea, payment, price, date } = req.body;
+
+  db.query("SELECT * FROM workers WHERE id=? AND worker=?", [id, login], (err, rows) => {
+    if (err) return res.status(500).json({ success: false, error: err.message });
+    if (rows.length === 0)
+      return res.status(403).json({ success: false, message: "Bu yozuv sizga tegishli emas" });
+
+    const diffMin = (Date.now() - new Date(rows[0].createdAt).getTime()) / 60000;
+    if (diffMin > 300)
+      return res.status(403).json({ success: false, message: "5 soatlik muddat tugagan" });
+
+    const sql = `
+      UPDATE workers
+      SET owner=?, clientPhone=?, pressCount=?, landArea=?, payment=?, price=?, date=?
+      WHERE id=?
+    `;
+    db.query(sql, [owner, clientPhone || null, pressCount, landArea, payment, price, date, id], (err) => {
+      if (err) return res.status(500).json({ success: false, error: err.message });
+      res.json({ success: true });
+    });
+  });
+});
+
+app.delete("/api/workers/own/:id", (req, res) => {
+  const id = req.params.id;
+  const login = req.query.login;
+
+  db.query("SELECT * FROM workers WHERE id=? AND worker=?", [id, login], (err, rows) => {
+    if (err) return res.status(500).json({ success: false, error: err.message });
+    if (rows.length === 0)
+      return res.status(403).json({ success: false, message: "Bu yozuv sizga tegishli emas" });
+
+    const diffMin = (Date.now() - new Date(rows[0].createdAt).getTime()) / 60000;
+    if (diffMin > 300)
+      return res.status(403).json({ success: false, message: "5 soatlik muddat tugagan" });
+
+    db.query("DELETE FROM workers WHERE id=?", [id], (err) => {
+      if (err) return res.status(500).json({ success: false, error: err.message });
+      res.json({ success: true });
+    });
   });
 });
