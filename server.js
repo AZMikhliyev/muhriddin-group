@@ -251,6 +251,27 @@ app.listen(port, () => {
   console.log(`✅ Server ${port}-portda ishlamoqda`);
 });
 
+app.get("/api/workers/summary", (req, res) => {
+  const login = req.query.login;
+
+  const sql = `
+    SELECT
+      COALESCE(SUM(pressCount), 0) AS totalPress,
+      COALESCE(SUM(landArea), 0) AS totalLand
+    FROM workers
+    WHERE worker = ?
+  `;
+
+  db.query(sql, [login], (err, rows) => {
+    if (err)
+      return res.status(500).json({ success: false, error: err.message });
+    res.json({
+      totalPress: rows[0].totalPress,
+      totalLand: rows[0].totalLand,
+    });
+  });
+});
+
 app.put("/api/workers/:id", (req, res) => {
   const id = req.params.id;
   const { owner, clientPhone, pressCount, landArea, payment, price, date } =

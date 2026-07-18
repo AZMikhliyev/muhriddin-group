@@ -92,6 +92,17 @@
 
         <button id="logoutWorker">Chiqish</button>
 
+        <div class="dashboard">
+          <div class="card">
+            <h3>Jami Press</h3>
+            <p id="myTotalPress">0</p>
+          </div>
+          <div class="card">
+            <h3>Jami Jatka (yer)</h3>
+            <p id="myTotalLand">0</p>
+          </div>
+        </div>
+
         <form id="worker-form">
           <label>Sana</label>
           <input type="date" id="workDate" />
@@ -125,7 +136,13 @@
           </div>
 
           <div class="jatka">
-            <input type="number" id="landArea" placeholder="Yer maydoni" />
+            <input
+              type="number"
+              id="landArea"
+              placeholder="Yer maydoni"
+              step="0.01"
+              min="0"
+            />
             <input type="text" id="jatkaOwner" placeholder="Yer egasi" />
             <input
               type="text"
@@ -175,7 +192,7 @@
         <input type="text" id="editOwner" />
 
         <input type="number" id="editPress" />
-        <input type="number" id="editLand" />
+        <input type="number" id="editLand" step="0.01" min="0" />
         <input type="text" id="editPhone" placeholder="Telefon" />
 
         <select id="editPayment">

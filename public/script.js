@@ -83,6 +83,7 @@ loginForm.addEventListener("submit", async function (e) {
     workerPanel.style.display = "flex";
     workerPanel.style.flexDirection = "column";
     loadMyWorkers(); // <-- shuni qo'shing
+    loadMySummary();
   }
 });
 
@@ -140,6 +141,18 @@ document.getElementById("jatkaPayment").addEventListener("change", function () {
 // =========================
 // WORKER FORM
 // =========================
+
+async function loadMySummary() {
+  const res = await fetch(
+    `/api/workers/summary?login=${encodeURIComponent(currentUser.login)}`,
+  );
+  const data = await res.json();
+
+  document.getElementById("myTotalPress").innerText = data.totalPress;
+  document.getElementById("myTotalLand").innerText = Number(
+    data.totalLand,
+  ).toFixed(2);
+}
 
 const workerForm = document.getElementById("worker-form");
 
@@ -255,6 +268,7 @@ workerForm.addEventListener("submit", async function (e) {
       pressPrice.style.display = "none";
 
       jatkaPrice.style.display = "none";
+      loadMySummary();
     } else {
       alert(result.message);
     }
@@ -348,6 +362,7 @@ async function deleteMyWorker(id) {
   const result = await res.json();
   if (result.success) {
     loadMyWorkers();
+    loadMySummary();
   } else {
     alert(result.message || "Xatolik");
   }
@@ -511,7 +526,7 @@ saveEdit.onclick = async () => {
   const result = await response.json();
   if (result.success) {
     editModal.style.display = "none";
-    isOwn ? loadMyWorkers() : loadWorkers();
+    isOwn ? loadMyWorkers() && loadMySummary() : loadWorkers();
     alert("Ma'lumot yangilandi.");
   } else {
     alert(result.message || result.error || "Xato");
