@@ -372,25 +372,21 @@ function drawTable(data) {
 
   data.forEach((item) => {
     tableBody.innerHTML += `
-
 <tr>
-
 <td>${new Date(item.date).toLocaleDateString("uz-UZ")}</td>
 <td>${item.worker}</td>
 <td>${item.type}</td>
 <td>${item.owner}</td>
+<td>${item.clientPhone ?? "-"}</td>
 <td>${item.pressCount ?? "-"}</td>
 <td>${item.landArea ?? "-"}</td>
 <td>${item.payment}</td>
 <td>${item.price ?? "-"}</td>
-
 <td>
     <button onclick="editWorker(${item.id})">✏️</button>
     <button onclick="deleteWorker(${item.id})">🗑</button>
 </td>
-
 </tr>
-
         `;
   });
 
@@ -400,24 +396,15 @@ function drawTable(data) {
 function editWorker(id) {
   const worker = workers.find((x) => x.id === id);
 
-  console.log(worker);
-
-  console.log("price:", worker.price);
-
   editId.value = worker.id;
+  editDate.value = worker.date.split("T")[0];
   editOwner.value = worker.owner;
+  editPhone.value = worker.clientPhone ?? ""; // <-- qo'shildi
   editPress.value = worker.pressCount ?? "";
   editLand.value = worker.landArea ?? "";
   editPayment.value = worker.payment;
   editPrice.value = worker.price ?? "";
-  console.log({
-    editId,
-    editOwner,
-    editPress,
-    editLand,
-    editPayment,
-    editPrice,
-  });
+  editModal.dataset.mode = "admin"; // <-- shuni ham tekshiring, bormi
   editModal.style.display = "flex";
 }
 
