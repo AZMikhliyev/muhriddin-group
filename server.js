@@ -51,29 +51,6 @@ app.get("/", (req, res) => {
 
 // =====================
 // MA'LUMOT QO'SHISH
-// =====================
-app.post("/api/workers", (req, res) => {
-  const { worker, type, owner, pressCount, landArea, payment, price, date } =
-    req.body;
-
-  const sql = `
-        INSERT INTO workers
-        (worker, type, owner, pressCount, landArea, payment, price, date)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
-  db.query(
-    sql,
-    [worker, type, owner, pressCount, landArea, payment, price, date],
-    (err) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ success: false, error: err.message });
-      }
-      res.json({ success: true });
-    },
-  );
-});
 
 // =====================
 // BARCHA MA'LUMOTLAR
@@ -181,16 +158,6 @@ app.delete("/api/workers/:id", (req, res) => {
   });
 });
 
-function drawMyTable(data) {
-  const body = document.getElementById("myTableBody");
-  body.innerHTML = "";
-
-  data.forEach((item) => {
-    const diffMin = (Date.now() - new Date(item.createdAt).getTime()) / 60000;
-    const editable = diffMin <= 300;
-    // ... qolgani avvalgidek
-  });
-}
 // =====================
 // UPDATE
 app.post("/api/workers", (req, res) => {

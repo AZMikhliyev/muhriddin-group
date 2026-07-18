@@ -82,6 +82,7 @@ loginForm.addEventListener("submit", async function (e) {
   } else {
     workerPanel.style.display = "flex";
     workerPanel.style.flexDirection = "column";
+    loadMyWorkers(); // <-- shuni qo'shing
   }
 });
 
@@ -229,7 +230,6 @@ workerForm.addEventListener("submit", async function (e) {
   // SERVERGA YUBORISH
   // =========================
   document.getElementById("workDate").value = "";
-  loadMyWorkers();
   try {
     const response = await fetch("/api/workers", {
       method: "POST",
