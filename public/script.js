@@ -2,6 +2,13 @@
 // ELEMENTLAR
 // =========================
 // Login qilgan foydalanuvchi
+
+// Telegram Mini App ichida ishga tushirish
+if (window.Telegram && window.Telegram.WebApp) {
+  Telegram.WebApp.ready();
+  Telegram.WebApp.expand();
+}
+
 let currentUser = null;
 const loginContainer = document.querySelector(".login-container");
 const adminPanel = document.querySelector(".admin");
@@ -455,7 +462,15 @@ searchInput.addEventListener("keyup", async () => {
 const excelBtn = document.getElementById("downloadExcel");
 
 excelBtn.addEventListener("click", () => {
-  window.location.href = "/api/excel";
+  const excelUrl = window.location.origin + "/api/excel";
+
+  if (window.Telegram && window.Telegram.WebApp) {
+    // Telegram ichida bo'lsa — tashqi brauzerda ochamiz
+    Telegram.WebApp.openLink(excelUrl);
+  } else {
+    // Oddiy brauzerda bo'lsa — avvalgidek ishlaydi
+    window.location.href = excelUrl;
+  }
 });
 async function deleteWorker(id) {
   if (!confirm("Rostdan ham o'chirilsinmi?")) {
