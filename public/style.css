@@ -10,6 +10,7 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: dark;
 }
 
 body {
@@ -37,31 +38,22 @@ body {
 
 .login-container {
   width: 380px;
-
   background: #1f2937;
-
   border-radius: 15px;
-
   padding: 35px;
-
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
-
   display: flex;
-
   flex-direction: column;
-
   gap: 20px;
 }
 
 .logo {
   display: flex;
-
   justify-content: center;
 }
 
 .logo img {
   width: 180px;
-
   border-radius: 12px;
 }
 
@@ -71,48 +63,49 @@ body {
 
 form {
   display: flex;
-
   flex-direction: column;
 }
 
 label {
   margin-bottom: 8px;
-
   font-size: 15px;
-
   font-weight: bold;
 }
 
 input,
-select {
+select,
+textarea {
   width: 100%;
-
   padding: 13px;
-
   border: none;
-
   border-radius: 8px;
-
   outline: none;
-
   margin-bottom: 18px;
-
   background: #374151;
-
   color: white;
-
   transition: 0.3s;
+  font-family: inherit;
 }
 
-input::placeholder {
+textarea {
+  resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
   color: #cfcfcf;
 }
 
 input:focus,
-select:focus {
+select:focus,
+textarea:focus {
   background: #4b5563;
-
   box-shadow: 0 0 10px #22c55e55;
+}
+
+select option {
+  background: #374151;
+  color: #fff;
 }
 
 /* ========================= */
@@ -121,34 +114,34 @@ select:focus {
 
 button {
   width: 100%;
-
   padding: 13px;
-
   border: none;
-
   border-radius: 8px;
-
   background: #16a34a;
-
   color: white;
-
   font-size: 16px;
-
   font-weight: bold;
-
   cursor: pointer;
-
   transition: 0.3s;
 }
 
 button:hover {
   background: #15803d;
-
   transform: translateY(-2px);
 }
 
 button:active {
   transform: scale(0.98);
+}
+
+.secondary-btn {
+  background: #374151;
+  max-width: 320px;
+  margin: 10px auto 0;
+}
+
+.secondary-btn:hover {
+  background: #4b5563;
 }
 
 /* ========================= */
@@ -158,7 +151,6 @@ button:active {
 .admin,
 .worker-panel {
   display: none;
-
   width: 100%;
 }
 
@@ -168,29 +160,15 @@ button:active {
 
 h1 {
   text-align: center;
-
   margin-bottom: 25px;
-
   font-size: 34px;
 }
 
 h2 {
   margin-bottom: 20px;
+  text-align: center;
 }
 
-/* ========================= */
-/* LINKS */
-/* ========================= */
-
-a {
-  color: white;
-
-  text-decoration: none;
-}
-
-ul {
-  list-style: none;
-}
 /* ========================= */
 /* ADMIN PANEL */
 /* ========================= */
@@ -234,56 +212,6 @@ ul {
   padding: 12px 22px;
 }
 
-/* ========================= */
-/* TABLE */
-/* ========================= */
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #1f2937;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-thead {
-  background: #16a34a;
-}
-
-thead th {
-  padding: 16px;
-  text-align: center;
-  font-size: 15px;
-  font-weight: bold;
-}
-
-tbody td {
-  padding: 15px;
-  text-align: center;
-  border-bottom: 1px solid #374151;
-}
-
-tbody tr {
-  transition: 0.3s;
-}
-
-tbody tr:hover {
-  background: #2d3748;
-}
-
-/* ========================= */
-/* TABLE SCROLL */
-/* ========================= */
-
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-}
-
-/* ========================= */
-/* BUTTON COLORS */
-/* ========================= */
-
 #downloadExcel {
   background: #16a34a;
 }
@@ -292,99 +220,137 @@ tbody tr:hover {
   background: #15803d;
 }
 
-#logoutAdmin {
+#logoutAdmin,
+#logoutWorker {
   background: #dc2626;
 }
 
-#logoutAdmin:hover {
+#logoutAdmin:hover,
+#logoutWorker:hover {
   background: #b91c1c;
 }
 
-/* ========================= */
-/* SEARCH */
-/* ========================= */
-select option {
-  background: #374151;
-  color: #fff;
-}
-
-select {
-  color-scheme: dark;
-}
-
-#search {
-  font-size: 15px;
-}
-
-/* ========================= */
-/* EMPTY TABLE */
-/* ========================= */
-
-tbody:empty::after {
-  content: "Ma'lumotlar mavjud emas";
+#logoutWorker {
+  width: 180px;
+  margin: 0 auto 30px;
   display: block;
-  text-align: center;
-  padding: 40px;
-  color: #9ca3af;
 }
 
 /* ========================= */
-/* SCROLLBAR */
+/* CARD LIST (kartochka ro'yxati) */
 /* ========================= */
 
-.table-container::-webkit-scrollbar {
-  height: 10px;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-  background: #16a34a;
-  border-radius: 20px;
-}
-
-.table-container::-webkit-scrollbar-track {
-  background: #1f2937;
-}
-
-/* ========================= */
-/* CARD EFFECT */
-/* ========================= */
-
-table {
+.card-list {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto 20px;
+  background: #d1d5db;
+  border-radius: 10px;
+  padding: 10px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
 }
 
-/* ========================= */
-/* STATUS COLORS */
-/* ========================= */
+.card-list.scrollable {
+  max-height: 360px;
+  overflow-y: auto;
+}
 
-.paid {
-  color: #22c55e;
+.card-list:empty::after {
+  content: "Ma'lumotlar mavjud emas";
+  display: block;
+  text-align: center;
+  padding: 25px;
+  color: #4b5563;
   font-weight: bold;
 }
 
-.unpaid {
-  color: #ef4444;
+.job-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  background: #000;
+  color: #fff;
+  padding: 15px 18px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.job-row:last-child {
+  margin-bottom: 0;
+}
+
+.job-row:hover {
+  background: #1f2937;
+}
+
+.job-row .job-main {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  flex-wrap: wrap;
   font-weight: bold;
 }
 
-/* ========================= */
-/* RESPONSIVE */
-/* ========================= */
-
-@media (max-width: 900px) {
-  .admin-top {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .admin-top input {
-    width: 100%;
-  }
-
-  .admin-top button {
-    width: 100%;
-  }
+.job-row .job-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
 }
+
+.job-row .job-actions button {
+  width: auto;
+  padding: 6px 10px;
+  margin: 0;
+  background: transparent;
+  font-size: 18px;
+}
+
+.job-row .job-actions button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: none;
+}
+
+.job-row .expired-label {
+  color: #9ca3af;
+  font-size: 13px;
+  font-weight: normal;
+}
+
+/* ========================= */
+/* DASHBOARD CARDS */
+/* ========================= */
+
+.dashboard {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+
+.card {
+  width: 180px;
+  background: #1f1f1f;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.card h3 {
+  color: #aaa;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 32px;
+  color: #4caf50;
+  font-weight: bold;
+}
+
 /* ========================= */
 /* WORKER PANEL */
 /* ========================= */
@@ -402,10 +368,6 @@ table {
   margin-bottom: 30px;
 }
 
-/* ========================= */
-/* WORKER FORM */
-/* ========================= */
-
 #worker-form {
   max-width: 700px;
   width: 100%;
@@ -416,15 +378,6 @@ table {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
-#worker-form select,
-#worker-form input {
-  margin-bottom: 18px;
-}
-
-/* ========================= */
-/* PRESS & JATKA */
-/* ========================= */
-
 .press,
 .jatka {
   display: none;
@@ -433,75 +386,116 @@ table {
   animation: fade 0.35s ease;
 }
 
-/* ========================= */
-/* SUBMIT */
-/* ========================= */
-
 #worker-form button {
   margin-top: 15px;
 }
 
-/* ========================= */
-/* LOGOUT */
-/* ========================= */
-
-#logoutWorker {
-  width: 180px;
-
-  margin: 0 auto 30px;
-
-  background: #dc2626;
-}
-
-#logoutWorker:hover {
-  background: #b91c1c;
-}
-
-/* ========================= */
-/* INPUT EFFECT */
-/* ========================= */
-
-input:hover,
-select:hover {
-  background: #4b5563;
-}
-
-/* ========================= */
-/* BUTTON EFFECT */
-/* ========================= */
-
-button {
-  transition: 0.3s;
-}
-
-button:hover {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
-}
-
-/* ========================= */
-/* ANIMATION */
-/* ========================= */
-
 @keyframes fade {
   from {
     opacity: 0;
-
     transform: translateY(15px);
   }
-
   to {
     opacity: 1;
-
     transform: translateY(0);
   }
 }
 
 /* ========================= */
-/* CUSTOM SCROLLBAR */
+/* MODAL (umumiy) */
+/* ========================= */
+
+.modal {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  padding: 20px;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #1f1f1f;
+  padding: 25px;
+  border-radius: 10px;
+}
+
+.modal-box.wide {
+  max-width: 520px;
+}
+
+.modal-box input,
+.modal-box select,
+.modal-box textarea {
+  width: 100%;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-buttons button {
+  margin-top: 0;
+}
+
+#closeEdit,
+#closeAllJobs,
+#closeDetail {
+  background: #374151;
+}
+
+#closeEdit:hover,
+#closeAllJobs:hover,
+#closeDetail:hover {
+  background: #4b5563;
+}
+
+/* ========================= */
+/* DETAIL VIEW (faqat o'qish) */
+/* ========================= */
+
+.detail-view p {
+  margin-bottom: 12px;
+  font-size: 16px;
+  background: #111827;
+  padding: 10px 14px;
+  border-radius: 6px;
+}
+
+.detail-view strong {
+  color: #9ca3af;
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  font-weight: normal;
+}
+
+.type-label {
+  background: #374151;
+  padding: 13px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  font-weight: bold;
+}
+
+/* ========================= */
+/* SCROLLBAR */
 /* ========================= */
 
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -510,7 +504,6 @@ button:hover {
 
 ::-webkit-scrollbar-thumb {
   background: #16a34a;
-
   border-radius: 20px;
 }
 
@@ -522,19 +515,27 @@ button:hover {
 /* RESPONSIVE */
 /* ========================= */
 
+@media (max-width: 900px) {
+  .admin-top {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .admin-top input,
+  .admin-top button {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 15px;
   }
-
   .login-container {
     width: 100%;
   }
-
   #worker-form {
     padding: 20px;
   }
-
   h1 {
     font-size: 28px;
   }
@@ -544,96 +545,16 @@ button:hover {
   h1 {
     font-size: 24px;
   }
-
   button {
     font-size: 15px;
   }
-
   input,
-  select {
+  select,
+  textarea {
     font-size: 15px;
   }
-}
-
-.dashboard {
-  display: flex;
-
-  justify-content: center;
-
-  gap: 20px;
-
-  flex-wrap: wrap;
-
-  margin: 20px;
-}
-
-.card {
-  width: 180px;
-
-  background: #1f1f1f;
-
-  border-radius: 10px;
-
-  padding: 20px;
-
-  text-align: center;
-
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.card h3 {
-  color: #aaa;
-
-  margin-bottom: 10px;
-}
-
-.card p {
-  font-size: 32px;
-
-  color: #4caf50;
-
-  font-weight: bold;
-}
-
-.modal {
-  display: none;
-
-  position: fixed;
-
-  left: 0;
-
-  top: 0;
-
-  width: 100%;
-
-  height: 100%;
-
-  background: rgba(0, 0, 0, 0.6);
-
-  justify-content: center;
-
-  align-items: center;
-}
-
-.modal-box {
-  width: 400px;
-
-  background: #1f1f1f;
-
-  padding: 25px;
-
-  border-radius: 10px;
-}
-
-.modal-box input,
-.modal-box select {
-  width: 100%;
-
-  margin: 10px 0;
-}
-
-.modal-buttons {
-  display: flex;
-
-  gap: 10px;
+  .job-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }

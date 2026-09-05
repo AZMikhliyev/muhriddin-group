@@ -58,32 +58,17 @@
             <p id="unpaidJobs">0</p>
           </div>
         </div>
+
         <div class="admin-top">
           <input type="text" id="search" placeholder="Qidirish..." />
-
           <button id="downloadExcel">Excel yuklab olish</button>
-
           <button id="logoutAdmin">Chiqish</button>
         </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>Sana</th>
-              <th>Ishchi</th>
-              <th>Apparat</th>
-              <th>Yer egasi</th>
-              <th>Telefon</th>
-              <th>Press soni</th>
-              <th>Yer maydoni</th>
-              <th>To'lov</th>
-              <th>Narxi</th>
-              <th>Amallar</th>
-            </tr>
-          </thead>
+        <h2>Bugungi ishlar</h2>
+        <div class="card-list" id="todayList"></div>
 
-          <tbody id="tableBody"></tbody>
-        </table>
+        <button id="openAllJobs" class="secondary-btn">Barchasi</button>
       </div>
 
       <!-- WORKER -->
@@ -95,11 +80,11 @@
 
         <div class="dashboard">
           <div class="card">
-            <h3>Jami Press</h3>
+            <h3>Jami press</h3>
             <p id="myTotalPress">0</p>
           </div>
           <div class="card">
-            <h3>Jami Jatka (yer)</h3>
+            <h3>Jami jatka (yer)</h3>
             <p id="myTotalLand">0</p>
           </div>
         </div>
@@ -115,6 +100,7 @@
             <option value="jatka">Jatka apparat</option>
           </select>
 
+          <!-- PRESS -->
           <div class="press">
             <input type="number" id="pressCount" placeholder="Presslar soni" />
             <input type="text" id="pressOwner" placeholder="Yer egasi" />
@@ -136,6 +122,7 @@
             />
           </div>
 
+          <!-- JATKA -->
           <div class="jatka">
             <input
               type="number"
@@ -163,54 +150,118 @@
             />
           </div>
 
+          <label>Izoh</label>
+          <textarea
+            id="workComment"
+            placeholder="Ish haqida izoh yozing... (majburiy)"
+            rows="3"
+          ></textarea>
+
           <button type="submit">Yuborish</button>
         </form>
 
         <h2>Mening yuborganlarim</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Sana</th>
-              <th>Yer egasi</th>
-              <th>Telefon</th>
-              <th>Press</th>
-              <th>Yer</th>
-              <th>To'lov</th>
-              <th>Narxi</th>
-              <th>Amallar</th>
-            </tr>
-          </thead>
-          <tbody id="myTableBody"></tbody>
-        </table>
+        <div class="card-list" id="myJobsList"></div>
       </div>
     </div>
 
-    <div class="modal" id="editModal">
+    <!-- BARCHA ISHLAR (filtr) OYNASI -->
+    <div class="modal" id="allJobsModal">
+      <div class="modal-box wide">
+        <h2>Barcha ishlar</h2>
+
+        <button id="allJobsExcelBtn">Excel faylni yuklash</button>
+
+        <label>Ishchini tanlash</label>
+        <select id="filterWorker">
+          <option value="">Barchasi</option>
+        </select>
+
+        <label>Ishni tanlash</label>
+        <select id="filterType">
+          <option value="">Barchasi</option>
+          <option value="Press">Press</option>
+          <option value="Jatka">Jatka</option>
+        </select>
+
+        <label>To'lovni tanlash</label>
+        <select id="filterPayment">
+          <option value="">Barchasi</option>
+          <option value="Ha">Qilingan</option>
+          <option value="Yo'q">Qilinmagan</option>
+        </select>
+
+        <label>Sana</label>
+        <input type="date" id="filterDate" />
+
+        <button id="filterSearchBtn">Qidirish</button>
+
+        <div class="card-list scrollable" id="allJobsList"></div>
+
+        <button id="closeAllJobs" class="secondary-btn">Yopish</button>
+      </div>
+    </div>
+
+    <!-- MA'LUMOT TO'LIQ KO'RINISHI (faqat o'qish uchun) -->
+    <div class="modal" id="detailModal">
+      <div class="modal-box">
+        <h2>Ma'lumot</h2>
+        <div class="detail-view" id="detailView"></div>
+        <div class="modal-buttons">
+          <button id="detailEditBtn">Tahrirlash</button>
+          <button id="closeDetail" class="secondary-btn">Yopish</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAHRIRLASH PANELI (admin ham, worker ham shu orqali) -->
+    <div class="modal" id="editFormModal">
       <div class="modal-box">
         <h2>Ma'lumotni tahrirlash</h2>
         <input type="hidden" id="editId" />
+        <input type="hidden" id="editType" />
+
+        <label>Sana</label>
         <input type="date" id="editDate" />
+
+        <label>Ish turi</label>
+        <p class="type-label" id="editTypeLabel"></p>
+
+        <div id="editPressGroup" style="display: none">
+          <label>Presslar soni</label>
+          <input type="number" id="editPress" />
+        </div>
+
+        <div id="editJatkaGroup" style="display: none">
+          <label>Yer maydoni</label>
+          <input type="number" id="editLand" step="0.01" min="0" />
+        </div>
+
+        <label>Yer egasi</label>
         <input type="text" id="editOwner" />
 
-        <input type="number" id="editPress" />
-        <input type="number" id="editLand" step="0.01" min="0" />
+        <label>Mijoz telefon raqami</label>
         <input type="text" id="editPhone" placeholder="Telefon" />
 
+        <label>To'lov</label>
         <select id="editPayment">
           <option value="Ha">Ha</option>
           <option value="Yo'q">Yo'q</option>
         </select>
 
+        <label>Narxi</label>
         <input type="number" id="editPrice" />
 
-        <div class="modal-buttons">
-          <button id="saveEdit">Saqlash</button>
+        <label>Izoh</label>
+        <textarea id="editComment" rows="3"></textarea>
 
+        <div class="modal-buttons">
+          <button id="saveEdit">Yangilash</button>
           <button id="closeEdit">Bekor qilish</button>
         </div>
       </div>
     </div>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
     <script src="script.js"></script>
   </body>
 </html>
